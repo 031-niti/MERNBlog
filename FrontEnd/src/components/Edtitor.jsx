@@ -28,7 +28,7 @@ const Edtitor = (value, onChange) => {
     };
     return (
         <div className='w-full max-w-md'>
-            <ReactQill value={value} theme='snow' modules={modules} />
+            <ReactQill value={value} theme='snow' modules={modules} className='h-48 mb-10'/>
         </div>
     )
 }

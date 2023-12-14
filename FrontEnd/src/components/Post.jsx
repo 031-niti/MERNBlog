@@ -10,7 +10,7 @@ const Post = () => {
                         alt=""/>
                 </Link>
             </div>
-            <div className='texts '>
+            <div className='texts'>
                 <Link>
                     <h2 className='text-lg font-semibold'>
                         A letter from Anthony and Hooi Ling
