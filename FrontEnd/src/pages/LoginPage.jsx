@@ -1,13 +1,15 @@
-import React, { useState ,useContext } from 'react'
+import React, { useState ,useContext, useEffect  } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext'
 const baseURL = import.meta.env.VITE_BASE_URL
+
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [redirest, setRedirest] = useState(false);
   const { setUserInfo } = useContext(UserContext);
+  const navigate = useNavigate();
   const login = async (e) => {
     e.preventDefault();
     const response = await fetch(`${baseURL}/login`, {
@@ -28,9 +30,11 @@ const LoginPage = () => {
       alert("wrong credentials!")
     }
   }
-  if (redirest) {
-    return <Navigator to={"/"} />;
-  }
+  useEffect(() => {
+    if (redirest) {
+      navigate("/");
+    }
+  }, [redirest, navigate]);
   return (
     <>
       <div className="hero min-h-[90vh]">
