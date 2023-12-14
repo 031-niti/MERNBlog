@@ -25,7 +25,7 @@ const Header = () => {
                 {username && (
                     <>
                         <Link to={"/create"} className='btn btn-ghost'>Create new post</Link>
-                        <a onClick={"/logout"} className='btn btn-ghost'>Logout</a>
+                        <a onClick={logout} className='btn btn-ghost'>Logout</a>
                     </>
                 )}
                 {!username && (

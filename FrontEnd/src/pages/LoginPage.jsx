@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react'
+import React, { useState ,useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext'
 const baseURL = import.meta.env.VITE_BASE_URL
@@ -16,7 +16,7 @@ const LoginPage = () => {
       headers: { "Content-Type": "application/json" },
       credentials:"include",
     });
-    console.log(password);
+
     if (response.ok) {
       alert("Login Successful!");
       response.json().then((userInfo)=>{
@@ -44,12 +44,12 @@ const LoginPage = () => {
                 <form className="space-y-3 ">
                   <div>
                     <label htmlFor="username" className="block text-sm leading-6 text-gray-900">Username</label>
-                    <input name="username" type="text" 
+                    <input name="username" type="text" onChange={(e) => setUsername(e.target.value)}
                     className="block w-full rounded-lg border-0 p-2 text-gray-900 shadow-sm ring-2 ring-inset ring-base-300 focus:border-none"/>
                   </div>
                   <div>
                     <label htmlFor="password" className="block text-sm leading-6 text-gray-900">Password</label>
-                    <input name="password" type="text" 
+                    <input name="password" type="password" onChange={(e) => setPassword(e.target.value)}
                       className="block w-full rounded-lg border-0 p-2 text-gray-900 shadow-sm ring-2 ring-inset ring-base-300 focus:border-none "/>
                   </div>
                 </form>

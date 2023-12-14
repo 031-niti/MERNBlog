@@ -68,7 +68,7 @@ const secret = process.env.SECRET
 app.post("/login",async (req, res) => {
     //เป็นการ Destructuring Object
     const { username, password } = req.body;
-    const userDoc = await User.findOne({username})
+    const userDoc = await User.findOne({ username })
     const isMatchedPassword = bcrypt.compareSync(password, userDoc.password);
     if (isMatchedPassword) {
         //logged in
