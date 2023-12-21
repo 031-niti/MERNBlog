@@ -121,6 +121,9 @@ app.post("/post", uploadMinddleware.single("file") , async (req, res) => {
     })
 });
 
+//get 
+app.get("/get")
+
 app.listen(PORT, () => {
     console.log("Server is runing on http://localhost:" + PORT);
 });
