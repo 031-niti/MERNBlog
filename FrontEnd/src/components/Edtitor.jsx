@@ -1,7 +1,7 @@
 import ReactQill from 'react-quill'
 import 'react-quill/dist/quill.snow.css';
 
-const Edtitor = (value, onChange) => {
+const Edtitor = ({value, onChange}) => {
     const toolbarOptions = {
         toolbar: [
             ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -28,7 +28,12 @@ const Edtitor = (value, onChange) => {
     };
     return (
         <div className='w-full max-w-md'>
-            <ReactQill value={value} theme='snow' modules={modules} className='h-48 mb-10'/>
+            <ReactQill
+                value={value}
+                theme='snow'
+                modules={modules}
+                onChange={onChange}
+                className='h-48 mb-10' />
         </div>
     )
 }

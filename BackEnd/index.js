@@ -2,11 +2,17 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require('mongoose');
 const User = require('./models/User');
+const Post = require('./models/Post')
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const cookieParser = require('cookie-parser');
+const multer = require('multer')
+const uploadMinddleware = multer({ dest: 'uploads/' })
+const fs = require('fs')
 
 const PORT = 4000;
 const app = express();
+
 
 //.env
 require('dotenv').config()
@@ -37,10 +43,12 @@ mongoose.connect(url, {
         process.exit(); //เป็น method ใน Node.js ที่ใช้ในการสิ้นสุดการทำงาน
     })
 
+
 //middleware
 app.use(cors({ credentials: true, origin:"http://localhost:5173"}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
     res.send('<h1>Hello Wellcome To MERN Stack Blog</h1>')
@@ -74,6 +82,7 @@ app.post("/login",async (req, res) => {
         //logged in
         jwt.sign({ username, id: userDoc }, secret, {}, (err, token)=>{
             if (err) throw err;
+            //cookie อยู่ที่ res
             res.cookie("token", token).json({
                 id:userDoc.id,
                 username,
@@ -89,6 +98,28 @@ app.post("/login",async (req, res) => {
 app.post("/logout",(req,res)=>{
     res.cookie.apply("token","").json("ok")
 })
+
+//create post
+app.post("/post", uploadMinddleware.single("file") , async (req, res) => {
+    const {originalname, path } = req.file;
+    const parts = originalname.split(".")
+    const ext = parts[parts.length - 1];
+    const newPath = path + "." + ext;
+    fs.renameSync(path, newPath);
+    const { token } = req.cookies || {};
+    jwt.verify(token, secret, async (err,info)=>{
+        if (err) throw err;
+        const { title, summary, content } = req.body;
+        const postDoc = await Post.create({
+            title,
+            summary,
+            content,
+            cover:newPath,
+            author:info.id,
+        });
+        res.json(postDoc);
+    })
+});
 
 app.listen(PORT, () => {
     console.log("Server is runing on http://localhost:" + PORT);
