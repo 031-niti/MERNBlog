@@ -26,7 +26,7 @@ mongoose.Promise = global.Promise;
 //กำหนด useNewUrlParser และ useUnifiedTopology ให้เป็น true ซึ่งเป็น options ที่ใช้เพื่อกำหนดการเชื่อมต่อและการทำงานของ MongoDB
 //ขณะที่ใช้ Mongoose ใน Node.js ช่วยให้การเชื่อมต่อกับ MongoDB รวดเร็วและมีประสิทธิภาพสูง
 mongoose.connect(url, {
-    dbName: 'mern-blog',
+    dbName: 'mernblog',
     //เป็นตัวบอกให้ Mongoose ใช้ URI ของ MongoDB ในรูปแบบ URL ในการเชื่อมต่อ แทนการใช้รูปแบบเดิมของการเชื่อมต่อ URI
     useNewUrlParser: true,
     //เป็นตัวบอกให้ Mongoose ใช้การเชื่อมต่อ MongoDB แบบ Unified Topology
@@ -122,8 +122,14 @@ app.post("/post", uploadMinddleware.single("file") , async (req, res) => {
 });
 
 //get 
-app.get("/get")
-
+app.get("/post", async (req, res) => {
+    try {
+        const postDoc = await Post.find();
+        res.status(200).json(postDoc);
+    } catch (error) {
+        res.status(500).json({ error: "failed to Get All Restaurant" });
+    }
+})
 app.listen(PORT, () => {
     console.log("Server is runing on http://localhost:" + PORT);
 });

@@ -1,28 +1,30 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { format } from 'date-fns';
 
-const Post = ({ title, summary, file  }) => {
-    
+const Post = ({post}) => {
     return (
-        <div className='post container mx-auto flex my-8 odd:flex-row-reverse '>
-            <div className='image w-3/4 mr-4 odd:ml-1'>
+        <div className='post container mx-auto flex my-8 odd:flex-row-reverse bg-base-200 rounded-lg '>
+            <div className='image w-3/4 '>
                 <Link>
-                    <img src={file}
+                    <img src={post.cover} className='rounded-lg odd:ml-2 even:mr-2'
                         alt=""/>
                 </Link>
             </div>
-            <div className='texts'>
+            <div className='texts w-3/4 p-4'>
                 <Link>
                     <h2 className='text-lg font-semibold'>
-                        {title}
+                        {post.title}
                     </h2>
                 </Link>
-                <p className='info'>
-                    <a href="" className='author'>Niti</a>
-                    <time className='ml-1'>12 December 2023 </time>
+                <p className='info flex flex-col'>
+                    <a href="" className='author'>{post.author}</a>
+                    <time className='text-sm font-semibold'>
+                        {format(new Date(post.createdAt), 'dd MMMM yyyy HH:mm')}
+                    </time>
                 </p>
                 <p className='summary'>
-                    {summary}
+                    {post.summary}
                 </p>
             </div>
         </div>
