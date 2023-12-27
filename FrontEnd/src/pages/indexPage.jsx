@@ -7,9 +7,7 @@ const indexPage = () => {
   useEffect(() => {
     const fetchAllPosts = async () => {
       try {
-        const response = await fetch(`${baseURL}/post`, {
-          method: "GET",
-        });
+        const response = await fetch(`${baseURL}/post`);
         const data = await response.json();
         setPosts(data);
       } catch (error) {
@@ -19,10 +17,11 @@ const indexPage = () => {
     fetchAllPosts();
   }, []);
   return (
-    <div >
-      {posts.map(post => (
-        <Post key={post._id} post={post} />
-      ))}
+    <div>
+      {posts.length > 0 &&
+        posts.map((post) => {
+          return <Post key={post._id} {...post} />
+        })}
     </div>
   )
 }
