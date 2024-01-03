@@ -5,14 +5,14 @@ const baseURL = import.meta.env.VITE_BASE_URL
 
 const Post = ({ _id, title, createdAt, author, cover, summary }) => {
     return (
-        <div className='post container mx-auto flex my-8 odd:flex-row-reverse rounded-lg bg-base-200 overflow-hidden'>
-            <div className='image w-3/4 '>
+        <div className='post container mx-auto flex my-8 rounded-lg bg-base-200 odd:flex-row-reverse overflow-hidden'>
+            <div className='image w-2/4'>
                 <Link to={`/post/${_id}`}>
-                    <img src={`${baseURL}/${cover}`} className=''
+                    <img src={`${baseURL}/${cover}`} 
                         alt=""/>
                 </Link>
             </div>
-            <div className='texts w-3/4 p-4'>
+            <div className='texts w-3/4 p-4 '>
                 <Link to={`/post/${_id}`}>
                     <h2 className='text-lg font-semibold'>
                         {title}

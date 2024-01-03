@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Post from '../components/Post'
+
 const baseURL = import.meta.env.VITE_BASE_URL
 
 const indexPage = () => {
@@ -16,13 +17,17 @@ const indexPage = () => {
     };
     fetchAllPosts();
   }, []);
+  
+
   return (
+    <>
     <div>
       {posts.length > 0 &&
         posts.map((post) => {
           return <Post key={post._id} {...post} />
         })}
     </div>
+    </>
   )
 }
 export default indexPage

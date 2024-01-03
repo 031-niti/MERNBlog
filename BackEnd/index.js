@@ -82,11 +82,11 @@ app.post("/login",async (req, res) => {
     const isMatchedPassword = bcrypt.compareSync(password, userDoc.password);
     if (isMatchedPassword) {
         //logged in
-        jwt.sign({ username, id: userDoc }, secret, {}, (err, token)=>{
+        jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token)=>{
             if (err) throw err;
             //cookie อยู่ที่ res
             res.cookie("token", token).json({
-                id:userDoc.id,
+                id:userDoc._id,
                 username,
                 password,
             })
@@ -150,38 +150,46 @@ app.get("/post/:id", async (req, res) => {
 //update
 app.put('/post', uploadMinddleware.single("file"), async (req, res) => {
     let newPath = null;
-    if (req.file) {
-        const { originalname, path } = req.file;
-        const parts = originalname.split(".")
-        const ext = parts[parts.length - 1];
-        const newPath = path + "." + ext;
+    if(req.file){
+        const {originalname, path} = req.file;
+        const parts = originalname.split(".");
+        const ext = parts[parts.length - 1]; 
+        const newPath = path + "." + ext; 
         fs.renameSync(path, newPath);
     }
-    const token = req.cookies;
-    jwt.verify(token, secret, async (err, info) => {
-        if (err) throw err;
-        const { id, title, summary, content } = req.body;
+    const {token} = req.cookies;
+    jwt.verify(token, secret, async (err, info)=>{
+        if(err) throw err;
+        const {id, title, summary, content} = req.body;
         const postDoc = await Post.findById(id);
-        const isAuthor = JSON.stringify(postDoc.author)=== JSON.stringify(info.id)
-        if (!isAuthor) {
+        const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id)
+        if(!isAuthor) {
             return res.status(400).json("You are not the author")
         }
-        Post.update({
+        await postDoc.updateOne({
             title,
             summary,
             content,
-            cover: newPath ?newPath:postDoc.cover,
-        });
+            cover: newPath? newPath:postDoc.cover,
+
+        }) 
         res.json(postDoc);
     })
+       
+})
+
+//Delete
+app.delete('/post/:id', async (req, res) => {
     try {
-        const updatePosts = await Post.findByIdAndUpdate(req.params.id, req.body);
-        res.status(200).json(updatePosts);
+        const postDoc = await Post.findByIdAndDelete(req.params.id);
+        if (postDoc) {
+            res.status(200).json({message: "Post ID " +req.params.id+ " is Delete Successfully"});
+        }
     } catch (error) {
         if (error.kind === "not_found!") {
-            res.status(400).json("Product not found!")
-        } else {
-            res.status(500).json({ error: "Failed to Update Product data!" });
+            res.status(400).json("Post not found!")
+        }else{
+            res.status(500).json({error:"Failed to Delete Post data!"});
         }
     }
 });
